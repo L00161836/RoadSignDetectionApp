@@ -2,6 +2,8 @@ import pathlib
 import tensorflow as tf
 from tensorflow.keras import models, layers
 import matplotlib.pyplot as plt
+from sklearn.metrics import classification_report
+import numpy as np
 
 # Setting up the directory path for the gathered images
 imageDirectory = pathlib.Path('input')
@@ -18,7 +20,7 @@ imageWidth = 32
 # Creating the training dataset from 80% of the overall dataset using the parameters set above.
 trainingDataset = tf.keras.utils.image_dataset_from_directory(
     imageDirectory,
-    validation_split=0.2,
+    validation_split=0.3,
     subset="training",
     seed=123,
     image_size=(imageHeight, imageWidth),
@@ -54,15 +56,25 @@ model.compile(optimizer='adam',
               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
               metrics=['accuracy'])
 
-history = model.fit(trainingDataset, epochs=30,
+history = model.fit(trainingDataset, epochs=15,
                     validation_data=validationDataset)
 
-plt.plot(history.history['accuracy'], label='accuracy')
-plt.plot(history.history['val_accuracy'], label = 'val_accuracy')
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.title('Model Accuracy')
 plt.xlabel('Epoch')
 plt.ylabel('Accuracy')
 plt.ylim([0.5, 1])
-plt.legend(loc='lower right')
+plt.legend(['Training Accuracy', 'Testing Accuracy'], loc='lower right')
 
 plt.show()
 
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('Model Loss')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.ylim([0, 1])
+plt.legend(['Training Loss', 'Testing Loss'], loc='lower right')
+
+plt.show()
