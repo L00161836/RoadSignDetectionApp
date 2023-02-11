@@ -56,17 +56,6 @@ dataAugmentation = tf.keras.Sequential([
     tf.keras.layers.RandomContrast(0.5)
 ])
 
-# for image, _ in trainingDataset.take(1):
-#     plt.figure(figsize=(10, 10))
-#     first_image = image[0]
-#     for i in range(9):
-#         ax = plt.subplot(3, 3, i + 1)
-#         augmented_image = dataAugmentation(tf.expand_dims(first_image, 0))
-#         plt.imshow(augmented_image[0] / 255)
-#         plt.axis('off')
-#
-#     plt.show()
-
 preprocessInput = tf.keras.applications.mobilenet_v2.preprocess_input
 rescale = tf.keras.layers.Rescaling(1./127.5, offset=-1)
 
@@ -109,7 +98,7 @@ model.summary()
 
 print(len(model.trainable_variables))
 
-initialEpochs = 25
+initialEpochs = 100
 
 loss0, accuracy0 = model.evaluate(validationDataset)
 
@@ -126,25 +115,6 @@ val_acc = history.history['val_accuracy']
 loss = history.history['loss']
 val_loss = history.history['val_loss']
 
-# plt.figure(figsize=(8, 8))
-# plt.subplot(2, 1, 1)
-# plt.plot(acc, label='Training Accuracy')
-# plt.plot(val_acc, label='Validation Accuracy')
-# plt.legend(loc='lower right')
-# plt.ylabel('Accuracy')
-# plt.ylim([min(plt.ylim()),1])
-# plt.title('Training and Validation Accuracy')
-#
-# plt.subplot(2, 1, 2)
-# plt.plot(loss, label='Training Loss')
-# plt.plot(val_loss, label='Validation Loss')
-# plt.legend(loc='upper right')
-# plt.ylabel('Cross Entropy')
-# plt.ylim([0,1.5])
-# plt.title('Training and Validation Loss')
-# plt.xlabel('epoch')
-# plt.show()
-
 baseModel.trainable = True
 
 fineTuneAt = 100
@@ -156,7 +126,7 @@ model.compile(loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=Tru
               optimizer=tf.keras.optimizers.RMSprop(learning_rate=baseLearningRate/10),
               metrics=['accuracy'])
 
-fineTuneEpochs = 25
+fineTuneEpochs = 100
 totalEpochs = initialEpochs + fineTuneEpochs
 
 historyFine = model.fit(trainingDataset,
@@ -190,61 +160,4 @@ plt.legend(loc='upper right')
 plt.title('Training and Validation Loss')
 plt.xlabel('epoch')
 plt.show()
-
-loss, accuracy = model.evaluate(testDataset)
-print('Test accuracy :', accuracy)
-
-imageBatch, labelBatch = testDataset.as_numpy_iterator().next()
-predictions = model.predict_on_batch(imageBatch).flatten()
-
-predictions = tf.nn.softmax(-1, 0., 1.)
-
-print('Predictions:\n', predictions.numpy())
-print('Labels:\n', labelBatch)
-
-plt.figure(figsize=(10, 10))
-for i in range(9):
-  ax = plt.subplot(3, 3, i + 1)
-  plt.imshow(imageBatch[i].astype("uint8"))
-  plt.title(classNames[predictions[i]])
-  plt.axis("off")
-
-
-# model = tf.keras.Sequential([
-#     tf.keras.layers.Rescaling(1./255),
-#     tf.keras.layers.Conv2D(32, 3, activation='relu'),
-#     tf.keras.layers.MaxPooling2D(),
-#     tf.keras.layers.Flatten(),
-#     tf.keras.layers.Dense(16, activation='relu'),
-#     tf.keras.layers.Dense(3)
-# ])
-#
-# model.compile(
-#   optimizer='adam',
-#   loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-#   metrics=['accuracy'])
-#
-# history = model.fit(
-#   trainingDataset,
-#   validation_data=validationDataset,
-#   epochs=15
-# )
-# #
-# plt.plot(history.history['accuracy'])
-# plt.plot(history.history['val_accuracy'])
-# plt.xlabel('Epoch')
-# plt.ylabel('Accuracy')
-# plt.ylim([0.5, 1])
-# plt.legend(['Training Accuracy', 'Testing Accuracy'], loc='lower right')
-#
-# plt.show()
-#
-# plt.plot(history.history['loss'])
-# plt.plot(history.history['val_loss'])
-# plt.xlabel('Epoch')
-# plt.ylabel('Loss')
-# plt.ylim([0, 0.6])
-# plt.legend(['Training Loss', 'Testing Loss'], loc='lower right')
-#
-# plt.show()
 
