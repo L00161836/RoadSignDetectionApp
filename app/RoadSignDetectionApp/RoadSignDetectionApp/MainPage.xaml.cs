@@ -1,4 +1,6 @@
-﻿namespace RoadSignDetectionApp;
+﻿using Microsoft.Maui.Storage;
+
+namespace RoadSignDetectionApp;
 
 public partial class MainPage : ContentPage
 {
@@ -9,16 +11,15 @@ public partial class MainPage : ContentPage
 		InitializeComponent();
 	}
 
-	private void OnCounterClicked(object sender, EventArgs e)
+	public async FileResult TakePhoto()
 	{
-		count++;
+		if (MediaPicker.Default.IsCaptureSupported)
+		{
+			FileResult photo = await MediaPicker.Default.CapturePhotoAsync();
 
-		if (count == 1)
-			CounterBtn.Text = $"Clicked {count} time";
-		else
-			CounterBtn.Text = $"Clicked {count} times";
+			return photo;
 
-		SemanticScreenReader.Announce(CounterBtn.Text);
+		}
 	}
 }
 
