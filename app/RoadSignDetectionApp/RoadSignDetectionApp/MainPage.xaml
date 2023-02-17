@@ -2,15 +2,31 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RoadSignDetectionApp.MainPage">
+    <ScrollView>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="9*"/>
-            <RowDefinition Height="3*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-    </Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1.61*"/>
+                <RowDefinition Height=".35*"/>
+                <RowDefinition Height=".45*"/>
+                <RowDefinition Height=".2*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <BoxView Color="{StaticResource Tertiary}"/>
+            <Label Text="Camera Feed Placeholder" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Primary}"/>
+
+            <BoxView Color="{StaticResource Primary}" Grid.Row="1"/>
+            <Label Text="SIGN NAME" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="1" FontSize="35" FontAttributes="Bold"/>
+
+            <BoxView Color="{StaticResource Primary}" Grid.Row="2"/>
+            <Image Source="sound_on_icon.svg" HorizontalOptions="Fill" VerticalOptions="Fill" Grid.Row="2"/>
+
+            <BoxView Color="{StaticResource Primary}" Grid.Row="3"/>
+
+        </Grid>
+    </ScrollView>
 
 </ContentPage>
