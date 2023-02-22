@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="RoadSignDetectionApp.MainPage">
+             x:Class="RoadSignDetectionApp.MainPage"
+             xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls">
     <ScrollView>
 
         <Grid>
@@ -15,7 +16,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <BoxView Color="{StaticResource Tertiary}"/>
+            <zxing:CameraView />
             <Label Text="Camera Feed Placeholder" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Primary}"/>
 
             <BoxView Color="{StaticResource Primary}" Grid.Row="1"/>
