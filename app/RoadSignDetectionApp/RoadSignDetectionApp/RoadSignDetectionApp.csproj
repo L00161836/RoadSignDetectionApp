@@ -50,6 +50,13 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Images\sound_on_icon.svg" />
+	  <None Remove="Resources\labels.txt" />
+	  <None Remove="Resources\model.tflite" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AndroidAsset Include="Resources\labels.txt" />
+	  <AndroidAsset Include="Resources\model.tflite" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -58,8 +65,10 @@
 		<PackageReference Include="ZXing.Net.Maui.Controls" Version="0.2.0-preview.2" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Controls\" />
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-android'">
+	  <PackageReference Include="Xamarin.TensorFlow.Lite">
+	    <Version>2.10.0.1</Version>
+	  </PackageReference>
 	</ItemGroup>
 
 </Project>
