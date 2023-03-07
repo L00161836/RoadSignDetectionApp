@@ -1,6 +1,8 @@
 ﻿using Android.App;
+using Java.Util;
 using Microsoft.Maui.Storage;
 using RoadSignDetectionApp.Model;
+using System.ComponentModel;
 using ZXing.Net.Maui.Controls;
 
 namespace RoadSignDetectionApp;
@@ -16,7 +18,7 @@ public partial class MainPage : ContentPage
 
 	private async Task<byte[]> CaptureFrameAsync()
 	{
-		IScreenshotResult frame = await CameraView.CaptureAsync();
+		var frame = await Screenshot.Default.CaptureAsync();
 
 		if (frame != null)
 		{
@@ -33,27 +35,45 @@ public partial class MainPage : ContentPage
 
     private void OnCameraView_Loaded(object sender, EventArgs e)
     {
-        System.Timers.Timer timer = new System.Timers.Timer();
-        timer.Interval = 1000;
-        timer.Elapsed += new System.Timers.ElapsedEventHandler(RunAgainstFrame);
-        timer.Start();
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    RunAgainstFrame();
+                    Task.Delay(1000);
 
+                }
+            });
 
     }
 
-    private async void RunAgainstFrame(object sender, System.Timers.ElapsedEventArgs e)
+    private async void RunAgainstFrame()
     {
 #if ANDROID
-        var frame = await CaptureFrameAsync();
+        byte[] frame = await CaptureFrameAsync();
 
         if (frame != null)
         {
             List<SignClassificationModel> result = TensorFlowClassifier.Classify(frame);
-            Console.WriteLine(result[0]);
-            MainThread.BeginInvokeOnMainThread(() => SignNameLabel.Text = result[0].Probability.ToString());
+
+            if (MainThread.IsMainThread)
+            {
+                UpdateTestLabels(result);
+            }
+            else
+            {
+                MainThread.BeginInvokeOnMainThread(() => UpdateTestLabels(result));
+            }
         }
 
 #endif
+    }
+
+    private void UpdateTestLabels(List<SignClassificationModel> result)
+    {
+        FiftyKphProbLabel.Text = result[0].Probability.ToString();
+        EightyKphProbLabel.Text = result[1].Probability.ToString();
+        WarningProbLabel.Text = result[2].Probability.ToString();
     }
 
     
