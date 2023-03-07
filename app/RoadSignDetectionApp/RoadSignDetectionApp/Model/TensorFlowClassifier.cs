@@ -1,22 +1,19 @@
-﻿using Java.Nio;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Android.App;
-using Java.IO;
-using Java.Nio.Channels;
+﻿
+#if ANDROID
 using Android.Graphics;
+using Java.IO;
+using Java.Nio;
+using Java.Nio.Channels;
+#endif
 
 namespace RoadSignDetectionApp.Model
 {
     public class TensorFlowClassifier
     {
+#if ANDROID
         const int FloatSize = 4;
         const int PixelSize = 3;
-
-        public List<SignClassificationModel> Classify(byte[] image)
+        public static List<SignClassificationModel> Classify(byte[] image)
         {
             var mappedByteBuffer = GetModelAsMappedByteBuffer();
             var interpreter = new Xamarin.TensorFlow.Lite.Interpreter(mappedByteBuffer);
@@ -41,7 +38,7 @@ namespace RoadSignDetectionApp.Model
 
             var modelList = new List<SignClassificationModel>();
 
-            for(var i = 0; i < labels.Count; i++)
+            for (var i = 0; i < labels.Count; i++)
             {
                 var label = labels[i];
                 modelList.Add(new SignClassificationModel(label, result[0][i]));
@@ -50,7 +47,7 @@ namespace RoadSignDetectionApp.Model
             return modelList;
         }
 
-        private MappedByteBuffer GetModelAsMappedByteBuffer()
+        private static MappedByteBuffer GetModelAsMappedByteBuffer()
         {
             var assetDescriptor = Android.App.Application.Context.Assets.OpenFd("model.tflite");
             var inputStream = new FileInputStream(assetDescriptor.FileDescriptor);
@@ -60,7 +57,7 @@ namespace RoadSignDetectionApp.Model
             return mappedByteBuffer;
         }
 
-        private ByteBuffer GetPhotoAsByteBuffer(byte[] image, int width, int height)
+        private static ByteBuffer GetPhotoAsByteBuffer(byte[] image, int width, int height)
         {
             var bitmap = BitmapFactory.DecodeByteArray(image, 0, image.Length);
             var resizedBitmap = Bitmap.CreateScaledBitmap(bitmap, width, height, true);
@@ -74,7 +71,7 @@ namespace RoadSignDetectionApp.Model
 
             var pixel = 0;
 
-            for(var i = 0; i < width; i++)
+            for (var i = 0; i < width; i++)
             {
                 for (var j = 0; j < height; j++)
                 {
@@ -90,5 +87,6 @@ namespace RoadSignDetectionApp.Model
 
             return byteBuffer;
         }
+#endif
     }
 }

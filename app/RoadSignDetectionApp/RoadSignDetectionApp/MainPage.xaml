@@ -16,11 +16,11 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <zxing:CameraView />
+            <zxing:CameraView x:Name="CameraView" Loaded="OnCameraView_Loaded" />
             <Label Text="Camera Feed Placeholder" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Primary}"/>
 
             <BoxView Color="{StaticResource Primary}" Grid.Row="1"/>
-            <Label Text="SIGN NAME" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="1" FontSize="35" FontAttributes="Bold"/>
+            <Label Text="SIGN NAME" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="1" FontSize="35" FontAttributes="Bold" x:Name="SignNameLabel"/>
 
             <BoxView Color="{StaticResource Primary}" Grid.Row="2"/>
             <Image Source="sound_on_icon.svg" HorizontalOptions="Fill" VerticalOptions="Fill" Grid.Row="2"/>
