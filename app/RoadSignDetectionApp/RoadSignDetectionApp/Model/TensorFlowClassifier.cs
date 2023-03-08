@@ -13,7 +13,7 @@ namespace RoadSignDetectionApp.Model
 #if ANDROID
         const int FloatSize = 4;
         const int PixelSize = 3;
-        public static List<SignClassificationModel> Classify(byte[] image)
+        public static List<SignClassificationModel> Classify(ByteBuffer data)
         {
             var mappedByteBuffer = GetModelAsMappedByteBuffer();
             var interpreter = new Xamarin.TensorFlow.Lite.Interpreter(mappedByteBuffer);
@@ -24,8 +24,8 @@ namespace RoadSignDetectionApp.Model
             var width = shape[1];
             var height = shape[2];
 
-            var byteBuffer = GetPhotoAsByteBuffer(image, width, height);
-
+            var byteBuffer = data;
+            
             var streamReader = new StreamReader(Android.App.Application.Context.Assets.Open("labels.txt"));
 
             var labels = streamReader.ReadToEnd().Split('\n').Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToList();

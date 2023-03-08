@@ -18,7 +18,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <zxing:CameraView x:Name="CameraView" Loaded="OnCameraView_Loaded" Grid.ColumnSpan="3" />
+            <zxing:CameraBarcodeReaderView x:Name="CameraView" Grid.ColumnSpan="3" />
 
             <BoxView Color="{StaticResource Primary}" Grid.Row="1" Grid.RowSpan="3" Grid.ColumnSpan="3"/>
             <Label Text="50kph" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="1" FontAttributes="Bold" FontSize="20"/>
