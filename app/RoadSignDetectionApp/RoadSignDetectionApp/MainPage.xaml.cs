@@ -1,5 +1,6 @@
 ﻿
 using Java.Nio;
+using Java.Util;
 using Microsoft.Maui.Storage;
 using RoadSignDetectionApp.Model;
 using System.ComponentModel;
@@ -24,11 +25,10 @@ public partial class MainPage : ContentPage
         PixelBufferHolder pixelBufferHolder = e.Data;
         ByteBuffer byteBuffer = pixelBufferHolder.Data;
 
-        ByteBuffer resized = ByteBuffer.Allocate(388800);
-        byteBuffer.Flip();
-        resized.Put(byteBuffer);
+        byte[] b = new byte[byteBuffer.Remaining()];
+        byteBuffer.Get(b);
 
-        List<SignClassificationModel> result = TensorFlowClassifier.Classify(resized);
+        List<SignClassificationModel> result = TensorFlowClassifier.Classify(Arrays.CopyOfRange(b, 0, 388800));
 
         if (MainThread.IsMainThread)
         {
