@@ -13,7 +13,7 @@ namespace RoadSignDetectionApp.Model
 #if ANDROID
         const int FloatSize = 4;
         const int PixelSize = 3;
-        public static List<SignClassificationModel> Classify(byte[] image)
+        public static List<SignClassificationModel> Classify(ByteBuffer image)   
         {
             var mappedByteBuffer = GetModelAsMappedByteBuffer();
             var interpreter = new Xamarin.TensorFlow.Lite.Interpreter(mappedByteBuffer);
@@ -24,8 +24,8 @@ namespace RoadSignDetectionApp.Model
             var width = shape[1];
             var height = shape[2];
 
-            var byteBuffer = ByteBuffer.Wrap(image);
-            
+            var imageByteBuffer = GetResizedByteBuffer(image, width, height);
+
             var streamReader = new StreamReader(Android.App.Application.Context.Assets.Open("labels.txt"));
 
             var labels = streamReader.ReadToEnd().Split('\n').Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToList();
@@ -33,7 +33,7 @@ namespace RoadSignDetectionApp.Model
             var outputLocations = new float[1][] { new float[labels.Count] };
             var outputs = Java.Lang.Object.FromArray(outputLocations);
 
-            interpreter.Run(byteBuffer, outputs);
+            interpreter.Run(imageByteBuffer, outputs);
             var result = outputs.ToArray<float[]>();
 
             var modelList = new List<SignClassificationModel>();
@@ -57,15 +57,18 @@ namespace RoadSignDetectionApp.Model
             return mappedByteBuffer;
         }
 
-        private static ByteBuffer GetPhotoAsByteBuffer(byte[] image, int width, int height)
+        private static ByteBuffer GetResizedByteBuffer(ByteBuffer byteBuffer, int width, int height)
         {
+            byte[] b = new byte[byteBuffer.Remaining()];
+            byteBuffer.Get(b);
+
             BitmapFactory.Options opts = new BitmapFactory.Options();
             opts.InJustDecodeBounds = false;
-            var bitmap = BitmapFactory.DecodeByteArray(image, 0, image.Length, opts);
+            var bitmap = BitmapFactory.DecodeByteArray(b, 0, b.Length, opts);
             var resizedBitmap = Bitmap.CreateScaledBitmap(bitmap, width, height, true);
 
             var modelInputSize = FloatSize * height * width * PixelSize;
-            var byteBuffer = ByteBuffer.AllocateDirect(modelInputSize);
+            byteBuffer = ByteBuffer.AllocateDirect(modelInputSize);
             byteBuffer.Order(ByteOrder.NativeOrder());
 
             var pixels = new int[width * height];

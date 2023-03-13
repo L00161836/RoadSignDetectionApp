@@ -25,10 +25,7 @@ public partial class MainPage : ContentPage
         PixelBufferHolder pixelBufferHolder = e.Data;
         ByteBuffer byteBuffer = pixelBufferHolder.Data;
 
-        byte[] b = new byte[byteBuffer.Remaining()];
-        byteBuffer.Get(b);
-
-        List<SignClassificationModel> result = TensorFlowClassifier.Classify(Arrays.CopyOfRange(b, 0, 388800));
+        List<SignClassificationModel> result = TensorFlowClassifier.Classify();
 
         if (MainThread.IsMainThread)
         {

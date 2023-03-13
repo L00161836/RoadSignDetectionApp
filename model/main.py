@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import tensorflow as tf
-import tensorflow_datasets as tfds
+# import tensorflow_datasets as tfds
 from keras import backend as K
 
 # Setting up the directory path for the gathered images
@@ -88,13 +88,13 @@ testDataset = testDataset.cache().prefetch(buffer_size=autotune)
 
 model = tf.keras.models.Sequential([
     tf.keras.layers.experimental.preprocessing.Rescaling(1. / 255, input_shape=(180, 180, 3)),
-    tf.keras.layers.RandomFlip('horizontal_and_vertical'),
-    tf.keras.layers.RandomRotation(0.3),
-    tf.keras.layers.RandomBrightness(0.5),
-    tf.keras.layers.RandomContrast(0.5),
-    tf.keras.applications.MobileNetV2(input_shape=(180, 180, 3),
-                                      include_top=False,
-                                      weights='imagenet'),
+    # tf.keras.layers.RandomFlip('horizontal_and_vertical'),
+    # tf.keras.layers.RandomRotation(0.3),
+    # tf.keras.layers.RandomBrightness(0.5),
+    # tf.keras.layers.RandomContrast(0.5),
+    # tf.keras.applications.MobileNetV2(input_shape=(180, 180, 3),
+    #                                   include_top=False,
+    #                                   weights='imagenet'),
     tf.keras.layers.Conv2D(128, 3, padding='same'),
     tf.keras.layers.LeakyReLU(alpha=0.1),
     tf.keras.layers.Conv2D(64, 3, padding='same'),
