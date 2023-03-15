@@ -62,6 +62,7 @@
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui.Core" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+		<PackageReference Include="System.Drawing.Common" Version="7.0.0" />
 		<PackageReference Include="ZXing.Net.Maui" Version="0.3.0-preview.1" />
 		<PackageReference Include="ZXing.Net.Maui.Controls" Version="0.2.0-preview.2" />
 	</ItemGroup>

@@ -14,8 +14,8 @@ imageCount = len(list(imageDirectory.glob('**/*.png')))
 print(imageCount)
 
 # Define the standardised image size and batch size (amount of images the model will train with at a time).
-batchSize = 32
-imageSize = (180, 180)
+batchSize = 16
+imageSize = (240, 240)
 
 # Creating the training dataset from 80% of the overall dataset using the parameters set above.
 trainingDataset = tf.keras.utils.image_dataset_from_directory(
@@ -24,7 +24,8 @@ trainingDataset = tf.keras.utils.image_dataset_from_directory(
     subset="training",
     seed=123,
     image_size=imageSize,
-    batch_size=batchSize
+    batch_size=batchSize,
+    color_mode="grayscale"
 )
 
 # Creating the testing dataset from 20% of the overall dataset using the parameters set above.
@@ -34,7 +35,8 @@ validationDataset = tf.keras.utils.image_dataset_from_directory(
     subset="validation",
     seed=123,
     image_size=imageSize,
-    batch_size=batchSize
+    batch_size=batchSize,
+    color_mode="grayscale"
 )
 
 classNames = trainingDataset.class_names
@@ -87,12 +89,10 @@ testDataset = testDataset.cache().prefetch(buffer_size=autotune)
 # model.summary()
 
 model = tf.keras.models.Sequential([
-    tf.keras.layers.experimental.preprocessing.Rescaling(1. / 255, input_shape=(180, 180, 3)),
-    # tf.keras.layers.RandomFlip('horizontal_and_vertical'),
-    # tf.keras.layers.RandomRotation(0.3),
-    # tf.keras.layers.RandomBrightness(0.5),
-    # tf.keras.layers.RandomContrast(0.5),
-    # tf.keras.applications.MobileNetV2(input_shape=(180, 180, 3),
+    tf.keras.layers.experimental.preprocessing.Rescaling(1. / 255, input_shape=(240, 240, 1)),
+    tf.keras.layers.RandomFlip('horizontal_and_vertical'),
+    tf.keras.layers.RandomRotation(0.3),
+    # tf.keras.applications.MobileNetV2(input_shape=(240, 240, 1),
     #                                   include_top=False,
     #                                   weights='imagenet'),
     tf.keras.layers.Conv2D(128, 3, padding='same'),
@@ -116,7 +116,7 @@ model.compile(optimizer='adam',
 model.fit(
     trainingDataset,
     validation_data=validationDataset,
-    epochs=12
+    epochs=25
 )
 
 #

@@ -1,4 +1,4 @@
-﻿
+﻿#if ANDROID
 using Java.Nio;
 using Java.Util;
 using Microsoft.Maui.Storage;
@@ -6,6 +6,7 @@ using RoadSignDetectionApp.Model;
 using System.ComponentModel;
 using ZXing.Net.Maui.Controls;
 using ZXing.Net.Maui.Readers;
+#endif
 
 namespace RoadSignDetectionApp;
 
@@ -25,7 +26,10 @@ public partial class MainPage : ContentPage
         PixelBufferHolder pixelBufferHolder = e.Data;
         ByteBuffer byteBuffer = pixelBufferHolder.Data;
 
-        List<SignClassificationModel> result = TensorFlowClassifier.Classify();
+        //byte[] b = new byte[byteBuffer.Remaining()];
+        //byteBuffer.Get(b);
+
+        List<SignClassificationModel> result = TensorFlowClassifier.Classify(byteBuffer);
 
         if (MainThread.IsMainThread)
         {
@@ -94,9 +98,13 @@ public partial class MainPage : ContentPage
 
     private void UpdateTestLabels(List<SignClassificationModel> result)
     {
-        FiftyKphProbLabel.Text = result[0].Probability.ToString();
-        EightyKphProbLabel.Text = result[1].Probability.ToString();
-        WarningProbLabel.Text = result[2].Probability.ToString();
+        if(result != null)
+        {
+            FiftyKphProbLabel.Text = result[0].Probability.ToString();
+            EightyKphProbLabel.Text = result[1].Probability.ToString();
+            WarningProbLabel.Text = result[2].Probability.ToString();
+        }
+
     }
 
 

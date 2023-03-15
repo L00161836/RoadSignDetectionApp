@@ -1,9 +1,13 @@
 ﻿
 #if ANDROID
 using Android.Graphics;
+using Android.Util;
 using Java.IO;
 using Java.Nio;
 using Java.Nio.Channels;
+using Java.Util;
+using System.Collections.Generic;
+using System.Drawing;
 #endif
 
 namespace RoadSignDetectionApp.Model
@@ -24,7 +28,7 @@ namespace RoadSignDetectionApp.Model
             var width = shape[1];
             var height = shape[2];
 
-            var imageByteBuffer = GetResizedByteBuffer(image, width, height);
+            var byteBuffer = GetResizedByteBuffer(image, height, width);
 
             var streamReader = new StreamReader(Android.App.Application.Context.Assets.Open("labels.txt"));
 
@@ -33,7 +37,7 @@ namespace RoadSignDetectionApp.Model
             var outputLocations = new float[1][] { new float[labels.Count] };
             var outputs = Java.Lang.Object.FromArray(outputLocations);
 
-            interpreter.Run(imageByteBuffer, outputs);
+            interpreter.Run(byteBuffer, outputs);
             var result = outputs.ToArray<float[]>();
 
             var modelList = new List<SignClassificationModel>();
@@ -45,6 +49,7 @@ namespace RoadSignDetectionApp.Model
             }
 
             return modelList;
+            
         }
 
         private static MappedByteBuffer GetModelAsMappedByteBuffer()
@@ -57,22 +62,16 @@ namespace RoadSignDetectionApp.Model
             return mappedByteBuffer;
         }
 
-        private static ByteBuffer GetResizedByteBuffer(ByteBuffer byteBuffer, int width, int height)
+        private static ByteBuffer GetResizedByteBuffer(ByteBuffer image, int width, int height)
         {
-            byte[] b = new byte[byteBuffer.Remaining()];
-            byteBuffer.Get(b);
+            //BitmapFactory.Options options = new BitmapFactory.Options();
+            //options.InJustDecodeBounds = true;
+            //var bitmap = BitmapFactory.DecodeByteArray(image, 0, image.Length, options);
+            //var resizedBitmap = Bitmap.CreateScaledBitmap(bitmap, width, height, true);
 
-            BitmapFactory.Options opts = new BitmapFactory.Options();
-            opts.InJustDecodeBounds = false;
-            var bitmap = BitmapFactory.DecodeByteArray(b, 0, b.Length, opts);
-            var resizedBitmap = Bitmap.CreateScaledBitmap(bitmap, width, height, true);
-
-            var modelInputSize = FloatSize * height * width * PixelSize;
-            byteBuffer = ByteBuffer.AllocateDirect(modelInputSize);
+            var modelInputSize = FloatSize * height * width;
+            var byteBuffer = ByteBuffer.AllocateDirect(modelInputSize);
             byteBuffer.Order(ByteOrder.NativeOrder());
-
-            var pixels = new int[width * height];
-            resizedBitmap.GetPixels(pixels, 0, resizedBitmap.Width, 0, 0, resizedBitmap.Width, resizedBitmap.Height);
 
             var pixel = 0;
 
@@ -80,17 +79,13 @@ namespace RoadSignDetectionApp.Model
             {
                 for (var j = 0; j < height; j++)
                 {
-                    var pixelVal = pixels[pixel++];
-
-                    byteBuffer.PutFloat(pixelVal >> 16 & 0xFF);
-                    byteBuffer.PutFloat(pixelVal >> 8 & 0xFF);
-                    byteBuffer.PutFloat(pixelVal & 0xFF);
+                    byteBuffer.PutFloat(image.GetFloat(pixel));
+                    pixel++;
                 }
             }
-
-            bitmap.Recycle();
-
             return byteBuffer;
+
+            
         }
 #endif
     }
