@@ -7,29 +7,28 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1.61*"/>
-            <RowDefinition Height=".35*"/>
-            <RowDefinition Height=".45*"/>
-            <RowDefinition Height=".2*"/>
+            <RowDefinition Height=".5*"/>
+            <RowDefinition Height=".5*"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
 
-        <zxing:CameraBarcodeReaderView x:Name="CameraView" Grid.ColumnSpan="3" />
+        <zxing:CameraBarcodeReaderView x:Name="CameraView" />
 
-        <BoxView Color="{StaticResource Primary}" Grid.Row="1" Grid.RowSpan="3" Grid.ColumnSpan="3"/>
-        <Label Text="50kph" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="1" FontAttributes="Bold" FontSize="20"/>
+        <BoxView x:Name="SignNameBoxView" Color="{StaticResource Primary}" Grid.Row="1"/>
+        
+        <!--<Label Text="50kph" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="1" FontAttributes="Bold" FontSize="20"/>
         <Label Text="" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="2" x:Name="FiftyKphProbLabel"/>
 
         <Label Text="80kph" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="1" Grid.Column="1" FontAttributes="Bold" FontSize="20"/>
         <Label Text="" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="2" Grid.Column="1" x:Name="EightyKphProbLabel"/>
 
         <Label Text="Warning" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="1" Grid.Column="2" FontAttributes="Bold" FontSize="20"/>
-        <Label Text="" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="2" Grid.Column="2" x:Name="WarningProbLabel"/>
+        <Label Text="" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="2" Grid.Column="2" x:Name="WarningProbLabel"/>-->
 
-        <!--<Image Source="sound_on_icon.svg" HorizontalOptions="Fill" VerticalOptions="Fill" Grid.Row="2"/>-->
+        <Label x:Name="SignNameLabel" Text="" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="1" FontAttributes="Bold" FontSize="40"/>
+
+        <BoxView Color="{StaticResource Primary}" Grid.Row="2"/>
+
+        <ImageButton x:Name="SoundButton" Source="sound_on_icon.svg" Grid.Row="2" Clicked="OnSoundButtonChanged"/>
 
     </Grid>
 

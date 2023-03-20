@@ -49,6 +49,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\sound_off_icon.svg" />
 	  <None Remove="Resources\Images\sound_on_icon.svg" />
 	  <None Remove="Resources\labels.txt" />
 	  <None Remove="Resources\model.tflite" />

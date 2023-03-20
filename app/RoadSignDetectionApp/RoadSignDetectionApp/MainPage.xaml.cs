@@ -33,11 +33,11 @@ public partial class MainPage : ContentPage
 
         if (MainThread.IsMainThread)
         {
-            UpdateTestLabels(result);
+            UpdateSignNameLabel(result);
         }
         else
         {
-            MainThread.BeginInvokeOnMainThread(() => UpdateTestLabels(result));
+            MainThread.BeginInvokeOnMainThread(() => UpdateSignNameLabel(result));
         }
 
 #endif
@@ -96,17 +96,68 @@ public partial class MainPage : ContentPage
     //#endif
     //    }
 
-    private void UpdateTestLabels(List<SignClassificationModel> result)
-    {
-        if(result != null)
-        {
-            FiftyKphProbLabel.Text = result[0].Probability.ToString();
-            EightyKphProbLabel.Text = result[1].Probability.ToString();
-            WarningProbLabel.Text = result[2].Probability.ToString();
-        }
+    //private void UpdateTestLabels(List<SignClassificationModel> result)
+    //{
+    //    if(result != null)
+    //    {
+    //        FiftyKphProbLabel.Text = result[0].Probability.ToString();
+    //        EightyKphProbLabel.Text = result[1].Probability.ToString();
+    //        WarningProbLabel.Text = result[2].Probability.ToString();
+    //    }
 
+    //}
+
+    private async void UpdateSignNameLabel(List<SignClassificationModel> result)
+    {
+        if (result[0].Probability > 0.38f || result[1].Probability > 0.38f || result[2].Probability > 0.98f)
+        {
+            SignNameBoxView.BackgroundColor = Color.FromArgb("#FCB9B8");
+            SignNameLabel.TextColor = Color.FromArgb("#1E4072");
+
+            if (result[0].Probability > 0.38f)
+            {
+                SignNameLabel.Text = "50 KPH Zone";
+                if (SoundButton.Source.Equals("sound_on_icon.svg"))
+                {
+                    await TextToSpeech.SpeakAsync("This is a 50 kilometre per hour zone");
+                }
+            }
+            else if (result[1].Probability > 0.38f)
+            {
+                SignNameLabel.Text = "80 KPH Zone";
+                if(SoundButton.Source.Equals("sound_on_icon.svg"))
+                {
+                    await TextToSpeech.SpeakAsync("This is a 80 kilometre per hour zone");
+                }
+            }
+            else
+            {
+                SignNameLabel.Text = "Roadworks";
+                if (SoundButton.Source.Equals("sound_on_icon.svg"))
+                {
+                    await TextToSpeech.SpeakAsync("Roadworks Ahead");
+                }
+            }
+
+            Thread.Sleep(4000);
+
+            SignNameBoxView.BackgroundColor = Color.FromArgb("#1E4072");
+            SignNameLabel.TextColor = Color.FromArgb("#FCB9B8");
+            SignNameLabel.Text = "";
+
+        }
     }
 
-
+    private void OnSoundButtonChanged(object sender, EventArgs e)
+    {
+        if(SoundButton.Source.Equals("sound_on_icon.svg"))
+        {
+            SoundButton.Source = "sound_off_icon.svg";
+        }
+        else
+        {
+            SoundButton.Source = "sound_on_icon.svg";
+        }
+    }
 }
 
