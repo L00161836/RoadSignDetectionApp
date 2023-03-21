@@ -114,7 +114,7 @@ public partial class MainPage : ContentPage
             SignNameBoxView.BackgroundColor = Color.FromArgb("#FCB9B8");
             SignNameLabel.TextColor = Color.FromArgb("#1E4072");
 
-            if (result[0].Probability > 0.38f)
+            if (result[0].Probability > 0.50f)
             {
                 SignNameLabel.Text = "50 KPH Zone";
                 if (SoundButton.Source.Equals("sound_on_icon.svg"))
@@ -122,7 +122,7 @@ public partial class MainPage : ContentPage
                     await TextToSpeech.SpeakAsync("This is a 50 kilometre per hour zone");
                 }
             }
-            else if (result[1].Probability > 0.38f)
+            else if (result[1].Probability > 0.50f)
             {
                 SignNameLabel.Text = "80 KPH Zone";
                 if(SoundButton.Source.Equals("sound_on_icon.svg"))
