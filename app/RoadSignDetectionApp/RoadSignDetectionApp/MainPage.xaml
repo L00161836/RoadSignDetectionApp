@@ -3,31 +3,36 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RoadSignDetectionApp.MainPage"
              xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls">
-    <ScrollView>
 
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="1.61*"/>
-                <RowDefinition Height=".35*"/>
-                <RowDefinition Height=".45*"/>
-                <RowDefinition Height=".2*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.61*"/>
+            <RowDefinition Height=".5*"/>
+            <RowDefinition Height=".5*"/>
+        </Grid.RowDefinitions>
 
-            <zxing:CameraView x:Name="CameraView" Loaded="OnCameraView_Loaded" />
-            <Label Text="Camera Feed Placeholder" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Primary}"/>
+        <zxing:CameraBarcodeReaderView x:Name="CameraView" />
 
-            <BoxView Color="{StaticResource Primary}" Grid.Row="1"/>
-            <Label Text="SIGN NAME" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="1" FontSize="35" FontAttributes="Bold" x:Name="SignNameLabel"/>
+        <BoxView x:Name="SignNameBoxView" Color="{StaticResource Primary}" Grid.Row="1"/>
 
-            <BoxView Color="{StaticResource Primary}" Grid.Row="2"/>
-            <Image Source="sound_on_icon.svg" HorizontalOptions="Fill" VerticalOptions="Fill" Grid.Row="2"/>
+        <!--DEBUG LAYOUT-->
 
-            <BoxView Color="{StaticResource Primary}" Grid.Row="3"/>
+        <!--<Label Text="50kph" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="1" FontAttributes="Bold" FontSize="20"/>
+        <Label Text="" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="2" x:Name="FiftyKphProbLabel"/>
 
-        </Grid>
-    </ScrollView>
+        <Label Text="80kph" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="1" Grid.Column="1" FontAttributes="Bold" FontSize="20"/>
+        <Label Text="" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="2" Grid.Column="1" x:Name="EightyKphProbLabel"/>
+
+        <Label Text="Warning" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="1" Grid.Column="2" FontAttributes="Bold" FontSize="20"/>
+        <Label Text="" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="2" Grid.Column="2" x:Name="WarningProbLabel"/>-->
+
+        <Label x:Name="SignNameLabel" Text="" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="1" FontAttributes="Bold" FontSize="50"/>
+
+        <BoxView Color="{StaticResource Primary}" Grid.Row="2"/>
+
+        <ImageButton x:Name="SoundButton" Source="sound_on_icon.svg" Grid.Row="2" Clicked="OnSoundButtonChanged"/>
+
+    </Grid>
 
 </ContentPage>
+

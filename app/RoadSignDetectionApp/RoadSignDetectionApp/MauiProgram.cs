@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
+using Plugin.LocalNotification;
+using ZXing.Net.Maui;
 using ZXing.Net.Maui.Controls;
 
 namespace RoadSignDetectionApp;
@@ -11,6 +14,19 @@ public static class MauiProgram
 		builder
 			.UseMauiApp<App>()
 			.UseBarcodeReader()
+			.UseLocalNotification()
+			.ConfigureMauiHandlers(h =>
+			{
+				h.AddHandler(typeof
+					(ZXing.Net.Maui.Controls.CameraBarcodeReaderView),
+					typeof(CameraBarcodeReaderViewHandler));
+                h.AddHandler(typeof
+                    (ZXing.Net.Maui.Controls.CameraView),
+                    typeof(CameraViewHandler));
+                h.AddHandler(typeof
+                    (ZXing.Net.Maui.Controls.BarcodeGeneratorView),
+                    typeof(BarcodeGeneratorViewHandler));
+            })
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
