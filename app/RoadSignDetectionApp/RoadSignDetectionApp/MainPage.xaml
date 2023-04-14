@@ -14,7 +14,9 @@
         <zxing:CameraBarcodeReaderView x:Name="CameraView" />
 
         <BoxView x:Name="SignNameBoxView" Color="{StaticResource Primary}" Grid.Row="1"/>
-        
+
+        <!--DEBUG LAYOUT-->
+
         <!--<Label Text="50kph" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="1" FontAttributes="Bold" FontSize="20"/>
         <Label Text="" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="2" x:Name="FiftyKphProbLabel"/>
 
@@ -24,7 +26,7 @@
         <Label Text="Warning" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="1" Grid.Column="2" FontAttributes="Bold" FontSize="20"/>
         <Label Text="" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="2" Grid.Column="2" x:Name="WarningProbLabel"/>-->
 
-        <Label x:Name="SignNameLabel" Text="" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="1" FontAttributes="Bold" FontSize="40"/>
+        <Label x:Name="SignNameLabel" Text="" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{StaticResource Secondary}" Grid.Row="1" FontAttributes="Bold" FontSize="50"/>
 
         <BoxView Color="{StaticResource Primary}" Grid.Row="2"/>
 
@@ -33,3 +35,4 @@
     </Grid>
 
 </ContentPage>
+
