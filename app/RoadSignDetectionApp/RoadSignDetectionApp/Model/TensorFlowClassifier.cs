@@ -12,11 +12,14 @@ using System.Drawing;
 
 namespace RoadSignDetectionApp.Model
 {
+    // NB: Some of the code from this tutorial https://devblogs.microsoft.com/xamarin/image-classification-xamarin-android/ was used and adapted for this class.
+    // This class functions as the interface for the application to the TF Lite model.
     public class TensorFlowClassifier
     {
-#if ANDROID
         const int FloatSize = 4;
         const int PixelSize = 3;
+
+        // This function takes an input image and runs it against the model, returning a SignClassificationModel object with sign probabilities.
         public static List<SignClassificationModel> Classify(ByteBuffer image)   
         {
             var mappedByteBuffer = GetModelAsMappedByteBuffer();
@@ -52,6 +55,7 @@ namespace RoadSignDetectionApp.Model
             
         }
 
+        //Brings the TF Lite model into the project as a mapped byte buffer.
         private static MappedByteBuffer GetModelAsMappedByteBuffer()
         {
             var assetDescriptor = Android.App.Application.Context.Assets.OpenFd("model.tflite");
@@ -62,6 +66,9 @@ namespace RoadSignDetectionApp.Model
             return mappedByteBuffer;
         }
 
+        /* Resizes the input image byte array to the correct size for the model.
+         Commented out code shows an attempt to do this by converting the byte buffer to a bitmap and scaling that, however
+         this returned multiple errors, especially with the BitmapFactory class. */
         private static ByteBuffer GetResizedByteBuffer(ByteBuffer image, int width, int height)
         {
             //BitmapFactory.Options options = new BitmapFactory.Options();
@@ -87,6 +94,5 @@ namespace RoadSignDetectionApp.Model
 
             
         }
-#endif
     }
 }
