@@ -1,6 +1,7 @@
 ﻿#if ANDROID
 using Java.Nio;
 using Java.Util;
+#endif
 using Microsoft.Maui.Storage;
 using Plugin.LocalNotification;
 using RoadSignDetectionApp.Model;
@@ -8,31 +9,34 @@ using System.ComponentModel;
 using System.Timers;
 using ZXing.Net.Maui.Controls;
 using ZXing.Net.Maui.Readers;
-#endif
-
 using Plugin.LocalNotification;
+using ZXing.Net.Maui.Readers;
 
 namespace RoadSignDetectionApp;
 
 public partial class MainPage : ContentPage
 {
-    private System.Timers.Timer timer;
-
 
     public MainPage()
     {
         InitializeComponent();
         CameraView.FrameReady += CameraView_FrameReady;
 
-
-
     }
 
+    /*This takes advantage of the implemented XZing Camera feed on the main page and its FrameReady event, that occurs after every frame.
+      Hence, this was the natural place to run the model code. This function takes the results of this and passes them to the UI
+      update function */
     private void CameraView_FrameReady(object sender, ZXing.Net.Maui.CameraFrameBufferEventArgs e)
     {
-#if ANDROID
         PixelBufferHolder pixelBufferHolder = e.Data;
+#if ANDROID
         ByteBuffer byteBuffer = pixelBufferHolder.Data;
+#elif IOS
+        Byte[] byteBuffer = PixelBufferHolder.Data;
+#endif
+        /* Code from a previous attempt to resize the image for the model, see GetResizedByteBuffer function in TensorFlowClassifer
+           for the more complex and fully working version */
 
         //byte[] b = new byte[byteBuffer.Remaining()];
         //byteBuffer.Get(b);
@@ -47,9 +51,9 @@ public partial class MainPage : ContentPage
         {
             MainThread.BeginInvokeOnMainThread(() => UpdateSignNameLabel(result));
         }
-
-#endif
     }
+
+    /* This function updates the UI when the inputted model result reaches a certain degree of accuracy with a given sign. */
     private async void UpdateSignNameLabel(List<SignClassificationModel> result)
     {
         if (result[0].Probability > 0.38f || result[1].Probability > 0.38f || result[2].Probability > 0.98f)
@@ -100,6 +104,7 @@ public partial class MainPage : ContentPage
         }
     }
 
+    //This mutes or unmutes the SpeakAsync function within the previous function.
     private void OnSoundButtonChanged(object sender, EventArgs e)
     {
         if (SoundButton.Source.Equals("sound_on_icon.svg"))
