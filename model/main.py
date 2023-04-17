@@ -1,6 +1,7 @@
 import pathlib
 import tensorflow as tf
 
+# N.B.: This code was largely inspired by https://www.tensorflow.org/tutorials/images/cnn
 # Setting up the directory path for the gathered images
 imageDirectory = pathlib.Path('input')
 
